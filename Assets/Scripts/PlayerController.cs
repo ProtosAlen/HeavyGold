@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     {
         Ring,
         Emerald,
-
+        Liroconite,
+        
     }
 
     [System.Serializable]
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         items.Add(new Items(Item.Ring, "", 125, 0.27f, 0));
+        items.Add(new Items(Item.Emerald, "", 125, 0.27f, 0));
     }
 
     void OnTriggerEnter(Collider other)
@@ -53,6 +55,10 @@ public class PlayerController : MonoBehaviour
             items[other.GetComponent<ItemScript>().itemID].count++;
             other.gameObject.SetActive(false);
             main.UpdateText();
+        }
+        if (other.gameObject.CompareTag("SellPoint"))
+        {
+            main.GoToPoint(other.GetComponent<ItemScript>().itemID);
         }
         if (other.gameObject.CompareTag("FinishPoint"))
         {
