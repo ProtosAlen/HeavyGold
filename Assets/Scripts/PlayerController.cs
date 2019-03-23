@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public Text moneyText;
     public Text weightText;
 
+    private MainScript main;
+
     //Items
     [System.Serializable]
     public enum Item
@@ -42,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        main = GetComponent<MainScript>();
         rb = GetComponent<Rigidbody>();
 
         items.Add(new Items(Item.Ring, "", 125, 0.27f, 0));
@@ -56,6 +59,10 @@ public class PlayerController : MonoBehaviour
             items[other.GetComponent<ItemScript>().itemID].count++;
             other.gameObject.SetActive(false);
             UpdateText();
+        }
+        if (other.gameObject.CompareTag("FinishPoint"))
+        {
+            main.GoToPoint(other.GetComponent<ItemScript>().itemID);
         }
     }
 
