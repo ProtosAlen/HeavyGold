@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        /*
+        
         Plane playerPlane = new Plane(Vector3.up, transform.position);
 
         // Generate a ray from the cursor position
@@ -42,19 +42,25 @@ public class PlayerController : MonoBehaviour
             // Smoothly rotate towards the target point.
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
         }
-    */
-
+    
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        //Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+
+        //rb.AddForce(movement * speed);
+
+        if (Input.GetKey(KeyCode.W)) // Forward
+        {
+            rb.MovePosition(transform.position + transform.forward * Time.deltaTime * speed);
+            //rb.AddForce(Vector3.forward * speed);
+        }
+
 
         if (Input.GetKeyDown(KeyCode.Space)) // Jump
-
         {
-
             rb.AddForce(Vector3.up * jumpPwr);
-
         }
+        
     }
 }
