@@ -1,9 +1,65 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    float moneyTotal;
+    float weightTotal;
+
+    public Text moneyText;
+    public Text weightText;
+
+    //Items
+    [System.Serializable]
+    public enum Item
+    {
+        Ring
+    }
+
+    [System.Serializable]
+    public class Items
+    {
+        public Item item;
+        public string description;
+        public float value;
+        public float weight;
+        public int count;
+
+        public Items(Item item, string description, float value, float weight, int count)
+        {
+            this.item = item;
+            this.description = description;
+            this.value = value;
+            this.weight = weight;
+            this.count = count;
+        }
+    }
+
+    [HideInInspector]
+    public List<Items> items = new List<Items>();
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+
+        items.Add(new Items(Item.Ring, "", 125, 0.27f, 0));
+
+        InvokeRepeating("UpdateText", 0, 1);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Item"))
+        {
+            items[other.GetComponent<ItemScript>().itemID].count++;
+            other.gameObject.SetActive(false);
+            UpdateText();
+        }
+    }
+
+    //Player Controlling
     public float speed;
     public float sprintSpeed;
     public float rotationSpeed;
@@ -12,46 +68,24 @@ public class PlayerController : MonoBehaviour
 
     private bool isSprinting;
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
-
-    public Transform target;
+    private Transform target;
 
     void FixedUpdate()
     {
-        
+        //Rotation
         Plane playerPlane = new Plane(Vector3.up, transform.position);
-
-        // Generate a ray from the cursor position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        // Determine the point where the cursor ray intersects the plane.
-        // This will be the point that the object must look towards to be looking at the mouse.
-        // Raycasting to a Plane object only gives us a distance, so we'll have to take the distance,
-        //   then find the point along that ray that meets that distance.  This will be the point
-        //   to look at.
         float hitdist = 0.0f;
-        // If the ray is parallel to the plane, Raycast will return false.
+
         if (playerPlane.Raycast(ray, out hitdist))
         {
-            // Get the point along the ray that hits the calculated distance.
             Vector3 targetPoint = ray.GetPoint(hitdist);
-
-            // Determine the target rotation.  This is the rotation if the transform looks at the target point.
             Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
 
-            // Smoothly rotate towards the target point.
             transform.rotation = targetRotation;
-            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0);
         }
-
-        Camera.main.transform.position = transform.position + new Vector3(0, 20);
-        //Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, transform.rotation, rotationSpeed);
-
-        //rb.AddForce(movement * speed);
-
+        
+        //Moving
         if (Input.GetKeyDown(KeyCode.LeftShift)) // Sprint
         {
             isSprinting = true;
@@ -63,7 +97,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W)) // Forward
         {
-            if(isSprinting)
+            if (isSprinting)
             {
                 rb.MovePosition(transform.position + transform.forward * Time.deltaTime * sprintSpeed);
             }
@@ -73,11 +107,32 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
         if (Input.GetKeyDown(KeyCode.Space)) // Jump
         {
             rb.AddForce(Vector3.up * jumpPwr);
         }
-        
+
+        //Cam Follow
+        Camera.main.transform.position = transform.position + new Vector3(0, 20);
+    }
+    private void UpdateText()
+    {
+        float tempMoney = 0;
+        float tempWeight = 0;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].count != 0)
+            {
+                tempMoney += items[i].value * items[i].count;
+                tempWeight += items[i].weight * items[i].count;
+            }
+        }
+
+        moneyTotal = tempMoney;
+        weightTotal = tempWeight;
+
+        moneyText.text = "$" + moneyTotal.ToString("F2");
+        weightText.text = weightTotal.ToString("F2") + "kg";
     }
 }
