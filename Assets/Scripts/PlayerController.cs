@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
-    public float rotSpeed;
+    public float sprintSpeed;
+    public float rotationSpeed;
     public float jumpPwr;
     private Rigidbody rb;
+
+    private bool isSprinting;
 
     private void Start()
     {
@@ -40,20 +43,34 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
 
             // Smoothly rotate towards the target point.
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
+            transform.rotation = targetRotation;
+            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0);
         }
-    
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
 
-        //Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        Camera.main.transform.position = transform.position + new Vector3(0, 20);
+        //Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, transform.rotation, rotationSpeed);
 
         //rb.AddForce(movement * speed);
 
+        if (Input.GetKeyDown(KeyCode.LeftShift)) // Sprint
+        {
+            isSprinting = true;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift)) // Stop Sprint
+        {
+            isSprinting = false;
+        }
+
         if (Input.GetKey(KeyCode.W)) // Forward
         {
-            rb.MovePosition(transform.position + transform.forward * Time.deltaTime * speed);
-            //rb.AddForce(Vector3.forward * speed);
+            if(isSprinting)
+            {
+                rb.MovePosition(transform.position + transform.forward * Time.deltaTime * sprintSpeed);
+            }
+            else
+            {
+                rb.MovePosition(transform.position + transform.forward * Time.deltaTime * speed);
+            }
         }
 
 
