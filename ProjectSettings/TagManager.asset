@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Item
   - FinishPoint
+  - Ground
   layers:
   - Default
   - TransparentFX

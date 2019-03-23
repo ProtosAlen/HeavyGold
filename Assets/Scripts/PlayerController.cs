@@ -5,19 +5,15 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    float moneyTotal;
-    float weightTotal;
-
-    public Text moneyText;
-    public Text weightText;
-
     private MainScript main;
 
     //Items
     [System.Serializable]
     public enum Item
     {
-        Ring
+        Ring,
+        Emerald,
+
     }
 
     [System.Serializable]
@@ -48,8 +44,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         items.Add(new Items(Item.Ring, "", 125, 0.27f, 0));
-
-        InvokeRepeating("UpdateText", 0, 1);
     }
 
     void OnTriggerEnter(Collider other)
@@ -58,7 +52,7 @@ public class PlayerController : MonoBehaviour
         {
             items[other.GetComponent<ItemScript>().itemID].count++;
             other.gameObject.SetActive(false);
-            UpdateText();
+            main.UpdateText();
         }
         if (other.gameObject.CompareTag("FinishPoint"))
         {
@@ -91,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
             transform.rotation = targetRotation;
         }
-        
+
         //Moving
         if (Input.GetKeyDown(KeyCode.LeftShift)) // Sprint
         {
@@ -114,32 +108,28 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) // Jump
-        {
-            rb.AddForce(Vector3.up * jumpPwr);
-        }
+
 
         //Cam Follow
         Camera.main.transform.position = transform.position + new Vector3(0, 20);
     }
-    private void UpdateText()
-    {
-        float tempMoney = 0;
-        float tempWeight = 0;
 
-        for (int i = 0; i < items.Count; i++)
+    bool isGrounded;
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.tag == ("Ground") && isGrounded == false)
         {
-            if (items[i].count != 0)
-            {
-                tempMoney += items[i].value * items[i].count;
-                tempWeight += items[i].weight * items[i].count;
-            }
+            isGrounded = true;
+        }
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(new Vector3(0, 2, 0) * jumpPwr, ForceMode.Impulse);
+            isGrounded = false;
         }
 
-        moneyTotal = tempMoney;
-        weightTotal = tempWeight;
-
-        moneyText.text = "$" + moneyTotal.ToString("F2");
-        weightText.text = weightTotal.ToString("F2") + "kg";
     }
 }
