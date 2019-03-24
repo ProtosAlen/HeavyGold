@@ -69,7 +69,8 @@ public class PlayerController : MonoBehaviour
                 if (items[i].count != 0)
                 {
                     main.moneyTotal += items[i].value * items[i].count;
-                    main.weightTotal = 0;
+                    main.weightTotal -= items[i].weight * items[i].count;
+                    items[i].count = 0;
                     main.UpdateText();
                 }
             }

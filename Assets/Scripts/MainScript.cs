@@ -74,23 +74,23 @@ public class MainScript : MonoBehaviour
 
     public void UpdateText()
     {
-        /*
-        float tempMoney = 0;
+        
+        //float tempMoney = 0;
         float tempWeight = 0;
 
         for (int i = 0; i < playerController.items.Count; i++)
         {
             if (playerController.items[i].count != 0)
             {
-                tempMoney += playerController.items[i].value * playerController.items[i].count;
+                //tempMoney += playerController.items[i].value * playerController.items[i].count;
                 tempWeight += playerController.items[i].weight * playerController.items[i].count;
             }
         }
 
-        moneyTotal = tempMoney;
+        //moneyTotal = tempMoney;
         weightTotal = tempWeight;
 
-    */
+    
         moneyText.text = "$" + moneyTotal.ToString("F2");
         weightText.text = weightTotal.ToString("F2") + "kg";
     }
