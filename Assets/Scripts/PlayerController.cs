@@ -16,7 +16,9 @@ public class PlayerController : MonoBehaviour
         Dagger,
         Necklace,
         Stick,
-        Crown
+        Gold_Bar,
+        Emerald,
+        Diamond
     }
 
     [System.Serializable]
@@ -46,12 +48,14 @@ public class PlayerController : MonoBehaviour
         main = GetComponent<MainScript>();
         rb = GetComponent<Rigidbody>();
 
-        items.Add(new Items(Item.Ring, "", 125, 0.27f, 0));
-        items.Add(new Items(Item.Liroconite, "", 125, 0.27f, 0));
-        items.Add(new Items(Item.Necklace, "", 125, 0.27f, 0));
-        items.Add(new Items(Item.Ring, "", 125, 0.27f, 0));
-        items.Add(new Items(Item.Stick, "", 125, 0.27f, 0));
-        items.Add(new Items(Item.Crown, "", 125, 0.27f, 0));
+        items.Add(new Items(Item.Ring, "", 225, 0.7f, 0));
+        items.Add(new Items(Item.Liroconite, "", 5000, 3, 0));
+        items.Add(new Items(Item.Necklace, "", 125, 5, 0));
+        items.Add(new Items(Item.Ring, "", 75, 2, 0));
+        items.Add(new Items(Item.Stick, "", 230, 1, 0));
+        items.Add(new Items(Item.Gold_Bar, "", 125, 6, 0));
+        items.Add(new Items(Item.Emerald, "", 125, 2, 0));
+        items.Add(new Items(Item.Diamond, "", 125, 5, 0));
     }
 
     void OnTriggerEnter(Collider other)
@@ -89,7 +93,15 @@ public class PlayerController : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Bots"))
         {
-            //TODO 
+            main.damagePlayer = true;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Bots"))
+        {
+            main.damagePlayer = false;
         }
     }
 
@@ -131,17 +143,29 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W)) // Forward
         {
-            if (isSprinting)
+            if (main.weightTotal != 0)
             {
-                rb.MovePosition(transform.position + transform.forward * Time.deltaTime * sprintSpeed);
+                if (isSprinting)
+                {
+                    rb.MovePosition(transform.position + transform.forward * Time.deltaTime * (sprintSpeed / main.weightTotal));
+                }
+                else if (main.weightTotal != 0)
+                {
+                    rb.MovePosition(transform.position + transform.forward * Time.deltaTime * (speed / main.weightTotal));
+                }
             }
             else
             {
-                rb.MovePosition(transform.position + transform.forward * Time.deltaTime * speed);
+                if (isSprinting)
+                {
+                    rb.MovePosition(transform.position + transform.forward * Time.deltaTime * sprintSpeed);
+                }
+                else
+                {
+                    rb.MovePosition(transform.position + transform.forward * Time.deltaTime * speed);
+                }
             }
         }
-
-
 
         //Cam Follow
         Camera.main.transform.position = transform.position + new Vector3(0, 20);

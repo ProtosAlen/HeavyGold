@@ -14,16 +14,21 @@ public class MainScript : MonoBehaviour
     float time3Open = 420;
 
     [Header("Stats")]
+    public float health;
+    public float healthMax;
     public float moneyTotal;
     public float weightTotal;
 
-    [Header("Texts")]
+    [Header("UI")]
     public Text moneyText;
     public Text weightText;
     public Text timeText;
+    public Slider healthSlider;
 
     public Transform[] spawnpoints;
     public GameObject[] stairs;
+
+    public bool damagePlayer = false;
 
     private void Start()
     {
@@ -68,6 +73,12 @@ public class MainScript : MonoBehaviour
             //TODO add end
         }
         timeText.text = TimeFormat(time, "F1");
+
+        if(damagePlayer)
+        {
+            health -= 0.1f;
+            UpdateText();
+        }
     }
 
     public void UpdateText()
@@ -88,6 +99,8 @@ public class MainScript : MonoBehaviour
         //moneyTotal = tempMoney;
         weightTotal = tempWeight;
 
+        healthSlider.maxValue = healthMax;
+        healthSlider.value = health;
     
         moneyText.text = "$" + moneyTotal.ToString("F2");
         weightText.text = weightTotal.ToString("F2") + "kg";
