@@ -36,15 +36,15 @@ public class MainScript : MonoBehaviour
         transform.position = spawnpoints[i].position;
     }
 
-    private void RaiseStairs(int s)
+    public void RaiseStairs(int s)
     {
-        if (stairs[s].gameObject.activeSelf)
+        if (!stairs[s].gameObject.activeSelf)
             stairs[s].gameObject.SetActive(true);
     }
 
-    private void LowerStairs(int l)
+    public void LowerStairs(int l)
     {
-        if (!stairs[l].gameObject.activeSelf)
+        if (stairs[l].gameObject.activeSelf)
             stairs[l].gameObject.SetActive(false);
     }
 
@@ -53,16 +53,14 @@ public class MainScript : MonoBehaviour
         time -= Time.deltaTime;
         if (time < time1Open && time > time2Open)
         {
-            RaiseStairs(0);
+
         }
         else if (time < time2Open && time > time3Open)
         {
-            RaiseStairs(1);
             LowerStairs(2);
         }
         else if (time < time3Open)
         {
-            RaiseStairs(2);
             LowerStairs(3);
         }
         else if (time < 0)

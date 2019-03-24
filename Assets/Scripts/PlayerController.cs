@@ -83,6 +83,10 @@ public class PlayerController : MonoBehaviour
         {
            //TODO DEAD
         }
+        if (other.gameObject.CompareTag("OpenStairs"))
+        {
+            main.RaiseStairs(other.GetComponent<ItemScript>().itemID);
+        }
     }
 
     //Player Controlling

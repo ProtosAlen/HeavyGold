@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - SellPoint
   - Death
+  - OpenStairs
   layers:
   - Default
   - TransparentFX
