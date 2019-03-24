@@ -76,7 +76,7 @@ public class MainScript : MonoBehaviour
 
         if(damagePlayer)
         {
-            health -= 0.3f;
+            health -= 0.1f;
             UpdateText();
         }
     }
