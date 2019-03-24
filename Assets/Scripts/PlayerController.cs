@@ -87,6 +87,10 @@ public class PlayerController : MonoBehaviour
         {
             main.RaiseStairs(other.GetComponent<ItemScript>().itemID);
         }
+        if (other.gameObject.CompareTag("Bots"))
+        {
+            //TODO 
+        }
     }
 
     //Player Controlling

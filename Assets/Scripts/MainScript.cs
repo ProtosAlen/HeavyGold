@@ -67,7 +67,7 @@ public class MainScript : MonoBehaviour
         {
             //TODO add end
         }
-        timeText.text = TimeFormat(time, "F0");
+        timeText.text = TimeFormat(time, "F1");
     }
 
     public void UpdateText()
