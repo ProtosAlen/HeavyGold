@@ -7,32 +7,23 @@ public class MainScript : MonoBehaviour
 {
     private PlayerController playerController;
 
+    [Header("Time")]
+    float time = 600;
+    float time1Open = 50;
+    float time2Open = 120;
+    float time3Open = 420;
+
     [Header("Stats")]
-    public float time;
-    float moneyTotal;
-    float weightTotal;
+    public float moneyTotal;
+    public float weightTotal;
 
     [Header("Texts")]
     public Text moneyText;
     public Text weightText;
     public Text timeText;
 
-    [System.Serializable]
-    public class SpawnPoints
-    {
-        public string name;
-        public string description;
-        public Transform finishPoint;
-
-        public SpawnPoints(string name, string description, Transform finishPoint)
-        {
-            this.name = name;
-            this.description = description;
-            this.finishPoint = finishPoint;
-        }
-    }
-
-    public List<SpawnPoints> spawnPoints = new List<SpawnPoints>();
+    public Transform[] spawnpoints;
+    public GameObject[] stairs;
 
     private void Start()
     {
@@ -42,13 +33,39 @@ public class MainScript : MonoBehaviour
 
     public void GoToPoint(int i)
     {
-        transform.position = spawnPoints[i].finishPoint.position;
+        transform.position = spawnpoints[i].position;
+    }
+
+    private void RaiseStairs(int s)
+    {
+        if (stairs[s].gameObject.activeSelf)
+            stairs[s].gameObject.SetActive(true);
+    }
+
+    private void LowerStairs(int l)
+    {
+        if (!stairs[l].gameObject.activeSelf)
+            stairs[l].gameObject.SetActive(false);
     }
 
     private void Update()
     {
         time -= Time.deltaTime;
-        if (time < 0)
+        if (time < time1Open && time > time2Open)
+        {
+            RaiseStairs(0);
+        }
+        else if (time < time2Open && time > time3Open)
+        {
+            RaiseStairs(1);
+            LowerStairs(2);
+        }
+        else if (time < time3Open)
+        {
+            RaiseStairs(2);
+            LowerStairs(3);
+        }
+        else if (time < 0)
         {
             //TODO add end
         }
@@ -57,6 +74,7 @@ public class MainScript : MonoBehaviour
 
     public void UpdateText()
     {
+        /*
         float tempMoney = 0;
         float tempWeight = 0;
 
@@ -72,6 +90,7 @@ public class MainScript : MonoBehaviour
         moneyTotal = tempMoney;
         weightTotal = tempWeight;
 
+    */
         moneyText.text = "$" + moneyTotal.ToString("F2");
         weightText.text = weightTotal.ToString("F2") + "kg";
     }

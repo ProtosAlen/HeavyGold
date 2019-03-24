@@ -12,9 +12,11 @@ public class PlayerController : MonoBehaviour
     public enum Item
     {
         Ring,
-        Emerald,
         Liroconite,
-        
+        Dagger,
+        Necklace,
+        Stick,
+        Crown
     }
 
     [System.Serializable]
@@ -45,7 +47,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         items.Add(new Items(Item.Ring, "", 125, 0.27f, 0));
-        items.Add(new Items(Item.Emerald, "", 125, 0.27f, 0));
+        items.Add(new Items(Item.Liroconite, "", 125, 0.27f, 0));
+        items.Add(new Items(Item.Necklace, "", 125, 0.27f, 0));
+        items.Add(new Items(Item.Ring, "", 125, 0.27f, 0));
+        items.Add(new Items(Item.Stick, "", 125, 0.27f, 0));
+        items.Add(new Items(Item.Crown, "", 125, 0.27f, 0));
     }
 
     void OnTriggerEnter(Collider other)
@@ -58,11 +64,23 @@ public class PlayerController : MonoBehaviour
         }
         if (other.gameObject.CompareTag("SellPoint"))
         {
-            main.GoToPoint(other.GetComponent<ItemScript>().itemID);
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i].count != 0)
+                {
+                    main.moneyTotal += items[i].value * items[i].count;
+                    main.weightTotal = 0;
+                    main.UpdateText();
+                }
+            }
         }
         if (other.gameObject.CompareTag("FinishPoint"))
         {
             main.GoToPoint(other.GetComponent<ItemScript>().itemID);
+        }
+        if (other.gameObject.CompareTag("Death"))
+        {
+           //TODO DEAD
         }
     }
 
