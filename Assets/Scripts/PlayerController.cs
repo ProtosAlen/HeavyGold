@@ -48,14 +48,14 @@ public class PlayerController : MonoBehaviour
         main = GetComponent<MainScript>();
         rb = GetComponent<Rigidbody>();
 
-        items.Add(new Items(Item.Ring, "", 225, 0.7f, 0));
-        items.Add(new Items(Item.Liroconite, "", 5000, 3, 0));
-        items.Add(new Items(Item.Necklace, "", 125, 5, 0));
-        items.Add(new Items(Item.Ring, "", 75, 2, 0));
-        items.Add(new Items(Item.Stick, "", 230, 1, 0));
-        items.Add(new Items(Item.Gold_Bar, "", 125, 6, 0));
-        items.Add(new Items(Item.Emerald, "", 125, 2, 0));
-        items.Add(new Items(Item.Diamond, "", 125, 5, 0));
+               items.Add(new Items(Item.Ring, "", 300, 1.1f, 0));
+        items.Add(new Items(Item.Liroconite, "", 2000, 2, 0));
+          items.Add(new Items(Item.Necklace, "", 2250, 2, 0));
+             items.Add(new Items(Item.Dagger, "", 800, 1, 0));
+              items.Add(new Items(Item.Stick, "", 500, 3, 0));
+           items.Add(new Items(Item.Gold_Bar, "", 400, 4, 0));
+            items.Add(new Items(Item.Emerald, "", 700, 2, 0));
+           items.Add(new Items(Item.Diamond, "", 1250, 2, 0));
     }
 
     void OnTriggerEnter(Collider other)
